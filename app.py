@@ -233,7 +233,7 @@ def chat():
         # استدعاء Anthropic API
         client = anthropic.Anthropic(api_key=os.environ.get('ANTHROPIC_API_KEY'))
         response = client.messages.create(
-            model="claude-sonnet-4-5-20251001",
+            model="claude-sonnet-4-5",
             max_tokens=2000,
             system=system,
             messages=messages
