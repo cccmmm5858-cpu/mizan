@@ -3,7 +3,7 @@ import json
 import re
 from flask import Flask, request, jsonify, send_from_directory
 import anthropic
- 
+
 app = Flask(__name__, static_folder='static')
 
 # ══ تحميل قواعد البيانات ══════════════════════════════════════
@@ -233,7 +233,7 @@ def chat():
         # استدعاء Anthropic API
         client = anthropic.Anthropic(api_key=os.environ.get('ANTHROPIC_API_KEY'))
         response = client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model="claude-sonnet-4-5-20251001",
             max_tokens=2000,
             system=system,
             messages=messages
