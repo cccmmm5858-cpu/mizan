@@ -1,0 +1,41 @@
+name: Critical foundations tests
+
+on:
+  push:
+    branches: [fix/critical-foundations]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: critical-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    if: github.event_name == 'push' || github.head_ref == 'fix/critical-foundations'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      ANTHROPIC_API_KEY: ''
+      CHAT_ACCESS_TOKEN: ''
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install application dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Run Python and API tests without network or API credentials
+        run: python tests/run_ci.py
+      - name: Run frontend regression tests
+        run: node tests/test_frontend.cjs
