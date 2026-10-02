@@ -26,6 +26,15 @@ class FoundationsTests(unittest.TestCase):
     def test_digital_correspondence_is_retrieved(self):
         self.assertTrue(any('المراسلات الرقمية' in a['content'] for a in search_articles('واتساب')))
 
+    def test_whatsapp_retrieves_digital_evidence_53_55_57(self):
+        expected = {'المادة الثالثة والخمسون', 'المادة الخامسة والخمسون',
+                    'المادة السابعة والخمسون'}
+        for query in ['واتساب', 'وَاتْسَاب']:
+            results = search_articles(query)
+            titles = {a['title'] for a in results if a['source'] == 'ethbat'}
+            self.assertTrue(expected <= titles, expected - titles)
+            self.assertEqual(results, search_articles(query, articles=list(reversed(ARTICLES))))
+
     def test_identity_and_ranking_independent_of_array_order(self):
         self.assertEqual(search_articles('كفالة'), search_articles('كفالة', articles=list(reversed(ARTICLES))))
         self.assertEqual(len(ARTICLES), len({a['id'] for a in ARTICLES}))
